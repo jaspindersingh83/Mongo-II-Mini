@@ -1,3 +1,4 @@
+require('./db/connection.js')
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -15,19 +16,17 @@ server.use(bodyParser.json());
 
 // Your API will be built out here.
 
-mongoose.Promise = global.Promise;
-const connect = mongoose.connect('mongodb://localhost/people', {
-  useMongoClient: true
-});
+server.get('/users',(req,res) =>{
+  Person.find()
+  .then( users =>res.status(200).json(users));
+})
+
+// mongoose.Promise = global.Promise;
+// const connect = mongoose.connect('mongodb://localhost/people', {
+//   useMongoClient: true
+// });
 /* eslint no-console: 0 */
-connect.then(
-  () => {
-    server.listen(port);
-    console.log(`Server Listening on ${port}`);
-  },
-  err => {
-    console.log('\n************************');
-    console.log("ERROR: Couldn't connect to MongoDB. Do you have it running?");
-    console.log('************************\n');
-  }
-);
+
+server.listen(port,()=>
+  console.log(`Server Listening on ${port}`));
+  
